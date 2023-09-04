@@ -1,23 +1,17 @@
-# JJCale
+# PyWeb
 
 一个面向python web初学者的web框架，代码简洁，结构清晰，方便初学者理解web框架是如何工作的。底层基于`werkzeug`和`jinja2`。
 
 ## 快速开始
-### 安装
-使用如下命令安装JJCale:
-```shell
-pip install JJCale
-```
-
 ### 创建一个新的应用
 ```python
-from JJCale import JJCale
-app = JJCale()
+from PyWeb import PyWeb
+app = PyWeb()
 ```
 ### 创建一个视图函数
 使用如下语句定义一个视图函数，此函数将会接受`http`请求`request`并返回一个简单的`hello world`字符串:
 ```python
-from JJCale.response import TextPlainResponse
+from PyWeb.response import TextPlainResponse
 
 def hello(request):
     return TextPlainResponse('hello world')
@@ -32,11 +26,11 @@ app.router.register([
 ```
 
 ### 启动服务器
-执行如下语句启动服务器，`JJCale`会帮助我们启动底层的`WSGI`服务器，默认地址是`127.0.0.1`，端口号是`23333`：
+执行如下语句启动服务器，`PyWeb`会帮助我们启动底层的`WSGI`服务器，默认地址是`127.0.0.1`，端口号是`23333`：
 ```python
 app.run(debug=True)
 ```
-`JJCale`为`run()`接口提供了一个`debug`参数，默认值是`False`，若置为`True`则会启动`debug`模式。
+`PyWeb`为`run()`接口提供了一个`debug`参数，默认值是`False`，若置为`True`则会启动`debug`模式。
 在`debug`模式中，任何对源代码的修改都将自动重启服务器，且一旦发生了错误将会在浏览器上以页面的形式显示出错误栈信息。
 
 ### 查看运行情况
@@ -47,12 +41,12 @@ app.run(debug=True)
 ---
 
 ## 各个功能的详细介绍和使用
-下面是`JJCale`框架目前支持的功能详细介绍和使用说明。
+下面是`PyWeb`框架目前支持的功能详细介绍和使用说明。
 
 ### 路由系统
 #### 定义路由表
 
-路由系统是`web`框架核心的功能之一，`JJCale`实现了Router类，并将其组合到每一个application中。
+路由系统是`web`框架核心的功能之一，`PyWeb`实现了Router类，并将其组合到每一个application中。
 用户手动编写路由规则，并调用Router类的register()方法将路由规则绑定到application中。
 
 每条路由由`3`个参数组成：`url, view_func, endpoint`，其中url已经不需要介绍，
@@ -64,9 +58,9 @@ view_func代表处理该url的视图函数，endpoint唯一标识一个view_func
 
 支持反向查询，通过endpoint查找url：
 ```python
-from JJCale import JJCale
+from PyWeb import PyWeb
 
-app = JJCale()
+app = PyWeb()
 
 url_map = [
     ('/', index_view, 'index'),   
@@ -80,12 +74,12 @@ print(url)   # url的值为'/'
 ```
 
 #### 动态路由
-`JJCale`支持带参数的url
+`PyWeb`支持带参数的url
 ```python
-from JJCale.app import JJCale
-from JJCale.response import TextPlainResponse
+from PyWeb.app import PyWeb
+from PyWeb.response import TextPlainResponse
 
-app = JJCale()
+app = PyWeb()
 
 def user_info_by_uid(request, uid):
     return TextPlainResponse(uid)
@@ -104,9 +98,9 @@ app.run()
 ```
 
 #### 多级路由
-`JJCale`的路由系统还支持多级路由，多级路由使用SubRouter实现:
+`PyWeb`的路由系统还支持多级路由，多级路由使用SubRouter实现:
 ```python
-from JJCale.router import Router, SubRouter
+from PyWeb.router import Router, SubRouter
 
 routes = [
     ('/index/something', SubRouter(url='/people', view_func=lambda: 'fake view func1', endpoint='people'), 'index'),
@@ -131,7 +125,7 @@ Map([<Rule '/index/something/people' -> ('index.people',)>,
 ### 视图系统
 #### 视图传参
 视图系统是处理`http`请求并返回`http`响应的地方。
-在`JJCale`中，所有的视图函数的第一个参数固定为`request`，代表当前的请求对象，用户可以通过此对象访问有关request的相关数据。如
+在`PyWeb`中，所有的视图函数的第一个参数固定为`request`，代表当前的请求对象，用户可以通过此对象访问有关request的相关数据。如
 表单数据和url参数。视图函数的其他参数为url中对应的参数。
 
 
@@ -139,21 +133,21 @@ Map([<Rule '/index/something/people' -> ('index.people',)>,
 ### 响应对象
 
 #### 纯文本响应对象`TextPlainResponse`
-`JJCale`使用`TextPlainResponse`来实现`mimetype=text/plain`的响应 ，所以它不会被浏览器当做`html`页面渲染，而是直接打印字符串。
+`PyWeb`使用`TextPlainResponse`来实现`mimetype=text/plain`的响应 ，所以它不会被浏览器当做`html`页面渲染，而是直接打印字符串。
 像这样使用视图系统：
 ```python
-from JJCale.response import TextPlainResponse
+from PyWeb.response import TextPlainResponse
 
 def hello(request, username):
     return TextPlainResponse(username)
 ```
 
 #### HTML响应对象`TextHTMLResponse`
-`JJCale`为用户提供了一个`TextHtmlResponse`来实现`mimetype=text/html`的响应对象，
+`PyWeb`为用户提供了一个`TextHtmlResponse`来实现`mimetype=text/html`的响应对象，
 其底层调用了`jinja2`的渲染接口，会将模板中的变量进行替换。 
 浏览器会将TextHTMLResponse返回的结果当做`html`页面渲染并展示。
 ```python
-from JJCale.response import TextHTMLResponse
+from PyWeb.response import TextHTMLResponse
 
 def user_info(request, username):
     return TextHTMLResponse(username=username, template_path='template', template_name='welcome.html')
@@ -162,13 +156,13 @@ def user_info(request, username):
 
 
 ### 中间件系统
-`JJCale`提供了中间件系统，让用户可以在视图函数处理前和视图函数处理后对请求(或响应)对象完成必要的中间操作。
+`PyWeb`提供了中间件系统，让用户可以在视图函数处理前和视图函数处理后对请求(或响应)对象完成必要的中间操作。
 
 #### 定义中间件
 实现了`MiddleWareInterface`接口类，自定义中间件需要实现指定接口。  
 通过以下方式自定义一个中间件：
 ```python
-from JJCale.middlewares import MiddleWareInterface, BEFORE_REQUEST
+from PyWeb.middlewares import MiddleWareInterface, BEFORE_REQUEST
 
 
 class MyMiddleware(MiddleWareInterface):

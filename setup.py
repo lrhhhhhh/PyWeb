@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='JJCale',
+    name='PyWeb',
     version='0.1',
     description='a simple web framework',
     long_description='a simple web framework',
-    url='https://github.com/lrhhhhhh/JJCale',
+    url='https://github.com/lrhhhhhh/PyWeb',
     author='lrhaoo',
     license='MIT',
     keywords=('web', 'framework'),

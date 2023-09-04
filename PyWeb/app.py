@@ -2,11 +2,11 @@ from werkzeug.exceptions import HTTPException
 from werkzeug.serving import run_simple
 from werkzeug.wrappers import Request
 
-from JJCale.middlewares import MiddlewareManager
-from JJCale.router import Router
+from PyWeb.middlewares import MiddlewareManager
+from PyWeb.router import Router
 
 
-class JJCale:
+class PyWeb:
     def __init__(self):
         self.middleware_manager = MiddlewareManager()
         self.router = Router()
